@@ -7,6 +7,7 @@ const users = []
 // POST /users
 router.post('/', (req, res) => {
   const { nome, email, senha } = req.body
+  console.log({nome, email, senha,})
 
   if (!nome || !email || !senha) {
     return res.status(400).json({ error: 'Preencha nome, email e senha.' })
