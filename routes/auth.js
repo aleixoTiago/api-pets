@@ -39,7 +39,7 @@ router.post("/", async (req, res) => {
         nome: user.nome
       }
     });
-  } catch {
+  } catch (err) {
     console.error(err)
     return res.status(500).json({ error: 'Erro ao logar'})
   }
