@@ -1,0 +1,30 @@
+
+services:
+  api:
+    build: .
+    container_name: pet_api
+    ports:
+      - "3000:3000"
+    env_file:
+      - .env
+    depends_on:
+      - postgres
+    volumes:
+      - .:/app
+    restart: always
+
+  postgres:
+    image: postgres:15
+    container_name: pet_postgres
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_DB: pet_api
+      POSTGRES_USER: pet_user
+      POSTGRES_PASSWORD: pet_password
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    restart: always
+
+volumes:
+  postgres_data:
