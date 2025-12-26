@@ -14,11 +14,11 @@ app.use(express.json())
 // rotas
 const usersRoutes = require('./routes/users')
 const authRoutes = require('./routes/auth')
-// const petsRoutes = require('./routes/pets')
+const petsRoutes = require('./routes/pets')
 
 app.use('/users', usersRoutes)
 app.use('/login', authRoutes)
-// app.use('/pets', petsRoutes)
+app.use('/pets', petsRoutes)
 
 const PORT = 4000
 app.listen(PORT, () => {
