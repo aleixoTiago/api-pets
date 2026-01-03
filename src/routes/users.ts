@@ -1,6 +1,6 @@
-import { Router, Request, Response } from "express";
-import bcrypt from "bcryptjs";
-import pool from "../database/db";
+import { Router, Request, Response } from 'express';
+import bcrypt from 'bcryptjs';
+import pool from '../database/db';
 
 const router = Router();
 
@@ -8,7 +8,7 @@ const router = Router();
  * POST /users
  * Criar usuário
  */
-router.post("/", async (req: Request, res: Response) => {
+router.post('/', async (req: Request, res: Response) => {
   const { nome, email, senha } = req.body as {
     nome?: string;
     email?: string;
@@ -17,19 +17,19 @@ router.post("/", async (req: Request, res: Response) => {
 
   if (!nome || !email || !senha) {
     return res.status(400).json({
-      error: "Preencha nome, email e senha.",
+      error: 'Preencha nome, email e senha.',
     });
   }
 
   try {
     const userExists = await pool.query(
-      "SELECT id FROM users WHERE email = $1",
+      'SELECT id FROM users WHERE email = $1',
       [email]
     );
 
     if (userExists.rowCount && userExists.rowCount > 0) {
       return res.status(400).json({
-        error: "Email já cadastrado.",
+        error: 'Email já cadastrado.',
       });
     }
 
@@ -43,13 +43,13 @@ router.post("/", async (req: Request, res: Response) => {
     );
 
     return res.status(201).json({
-      message: "Usuário criado com sucesso!",
+      message: 'Usuário criado com sucesso!',
       user: result.rows[0],
     });
   } catch (err) {
     console.error(err);
     return res.status(500).json({
-      error: "Erro interno do servidor.",
+      error: 'Erro interno do servidor.',
     });
   }
 });
@@ -58,10 +58,10 @@ router.post("/", async (req: Request, res: Response) => {
  * GET /users
  * Listar usuários
  */
-router.get("/", async (_req: Request, res: Response) => {
+router.get('/', async (_req: Request, res: Response) => {
   try {
     const result = await pool.query(
-      "SELECT id, nome, email, created_at FROM users"
+      'SELECT id, nome, email, created_at FROM users'
     );
 
     return res.status(200).json({
@@ -71,7 +71,7 @@ router.get("/", async (_req: Request, res: Response) => {
   } catch (err) {
     console.error(err);
     return res.status(500).json({
-      error: "Erro ao buscar usuários",
+      error: 'Erro ao buscar usuários',
     });
   }
 });

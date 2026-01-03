@@ -1,24 +1,26 @@
-import express from "express";
-import cors from "cors";
+import express from 'express';
+import cors from 'cors';
 
-import usersRoutes from "./routes/users";
-import authRoutes from "./routes/auth";
-import petsRoutes from "./routes/pets";
+import usersRouter from './routes/users';
+import authRouter from './routes/auth';
+import petsRouter from './routes/pets';
+import publicationRouter from './routes/publication';
 
 const app = express();
 
 // middlewares globais
 app.use(
   cors({
-    origin: "http://localhost:3000",
+    origin: 'http://localhost:3000',
   })
 );
 
 app.use(express.json());
 
 // rotas
-app.use("/users", usersRoutes);
-app.use("/login", authRoutes);
-app.use("/pets", petsRoutes);
+app.use('/users', usersRouter);
+app.use('/login', authRouter);
+app.use('/pets', petsRouter);
+app.use('/publication', publicationRouter);
 
 export default app;
