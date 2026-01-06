@@ -111,31 +111,45 @@ router.get('/:id', authMiddleware, async (req: Request, res: Response) => {
 });
 
 router.get('/', async (req: Request, res: Response) => {
+  const limit = Number(req.query.limit) || 5;
+  const offset = Number(req.query.offset) || 0;
+
   try {
     const result = await pool.query(
       `
-        SELECT
-          p.id,
-          p.author,
-          p.author_avatar,
-          p.category,
-          p.content,
-          p.image,
-          p.pet_image,
-          p.likes,
-          p.comments,
-          p.created_at,
-          p.user_id
-        FROM publication p
-        ORDER BY p.created_at DESC
-        `
+      SELECT
+        p.id,
+        p.author,
+        p.author_avatar,
+        p.category,
+        p.content,
+        p.image,
+        p.pet_image,
+        p.likes,
+        p.comments,
+        p.created_at,
+        p.user_id
+      FROM publication p
+      ORDER BY p.created_at DESC
+      LIMIT $1 OFFSET $2
+      `,
+      [limit, offset]
     );
 
-    console.log(result.rows);
+    //     SELECT
+    //   p.*,
+    //   u.nome AS author,
+    //   u.avatar_image AS author_avatar
+    // FROM publication p
+    // JOIN users u ON u.id = p.user_id;
+
+    const totalResult = await pool.query(`SELECT COUNT(*) FROM publication`);
 
     return res.status(200).json({
-      total: result.rowCount,
       publications: result.rows,
+      total: Number(totalResult.rows[0].count),
+      limit,
+      offset,
     });
   } catch (err) {
     console.error(err);

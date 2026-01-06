@@ -9,10 +9,11 @@ const router = Router();
  * Criar usuário
  */
 router.post('/', async (req: Request, res: Response) => {
-  const { nome, email, senha } = req.body as {
+  const { nome, email, senha, avatarImage } = req.body as {
     nome?: string;
     email?: string;
     senha?: string;
+    avatarImage?: string;
   };
 
   if (!nome || !email || !senha) {
@@ -36,10 +37,12 @@ router.post('/', async (req: Request, res: Response) => {
     const hash = await bcrypt.hash(senha, 10);
 
     const result = await pool.query(
-      `INSERT INTO users (nome, email, senha)
-       VALUES ($1, $2, $3)
-       RETURNING id, nome, email`,
-      [nome, email, hash]
+      `
+      INSERT INTO users (nome, email, senha, avatar_image)
+      VALUES ($1, $2, $3, $4)
+      RETURNING id, nome, email, avatar_image
+      `,
+      [nome, email, hash, avatarImage ?? null]
     );
 
     return res.status(201).json({
